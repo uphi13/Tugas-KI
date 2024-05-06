@@ -14,7 +14,7 @@ class EncryptionApp(QMainWindow):
         self.setGeometry(100, 100, 800, 600)
         self.setStyleSheet("background-color: #2c3e50;")
 
-        self.key = None  # Kunci enkripsi akan diatur saat pengguna memasukkan
+        self.key = None  # Kunci enkripsi akan diatur oleh user langsung
 
         # Layout dan komponen GUI
         central_widget = QWidget()
@@ -26,13 +26,23 @@ class EncryptionApp(QMainWindow):
         input_page = QWidget()
         input_layout = QVBoxLayout()
 
+        self.title_label = QLabel("Algoritma AES Test")
+        self.title_label.setStyleSheet("""
+            font-size: 24px;
+            font-weight: bold;
+            color: #ecf0f1;
+        """)
+        self.title_label.setAlignment(Qt.AlignCenter)
+        input_layout.addWidget(self.title_label)
+
         input_group = QGroupBox("Input")
         input_group.setStyleSheet("color: #ecf0f1;")
         input_box_layout = QVBoxLayout()
         self.text_input = QTextEdit()
+        self.text_input.setPlaceholderText("Masukkan plaintext yang ingin dienkripsi")
         self.text_input.setStyleSheet("background-color: #34495e; color: #ecf0f1;")
         input_box_layout.addWidget(self.text_input)
-
+        
         self.key_input = QLineEdit()
         self.key_input.setPlaceholderText("Masukkan kunci enkripsi (16 byte)")
         self.key_input.setStyleSheet("background-color: #34495e; color: #ecf0f1;")
@@ -41,6 +51,22 @@ class EncryptionApp(QMainWindow):
         input_group.setLayout(input_box_layout)
 
         input_button_layout = QHBoxLayout()
+        self.reset_button = QPushButton("Reset")
+        self.reset_button.setStyleSheet("""
+            QPushButton {
+                background-color: #9b59b6;
+                color: #ecf0f1;
+                padding: 10px;
+                border-radius: 5px;
+            }
+            QPushButton:hover {
+                background-color: #8e44ad;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+            }
+        """)
+        self.reset_button.clicked.connect(self.reset_input)
+        input_button_layout.addWidget(self.reset_button)
+        
         self.encrypt_button = QPushButton("Enkripsi")
         self.encrypt_button.setStyleSheet("""
             QPushButton {
@@ -54,11 +80,8 @@ class EncryptionApp(QMainWindow):
                 box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
             }
         """)
-        
         self.encrypt_button.clicked.connect(self.encrypt_text)
-        input_button_layout.addStretch()
         input_button_layout.addWidget(self.encrypt_button)
-        input_button_layout.addStretch()
 
         input_layout.addWidget(input_group)
         input_layout.addLayout(input_button_layout)
@@ -67,7 +90,16 @@ class EncryptionApp(QMainWindow):
         # Halaman Output
         output_page = QWidget()
         output_layout = QVBoxLayout()
-
+        
+        self.output_title_label = QLabel("Algoritma AES Test")
+        self.output_title_label.setStyleSheet("""
+            font-size: 24px;
+            font-weight: bold;
+            color: #ecf0f1;
+        """)
+        self.output_title_label.setAlignment(Qt.AlignCenter)
+        output_layout.addWidget(self.output_title_label)
+        
         output_group = QGroupBox("Output")
         output_group.setStyleSheet("color: #ecf0f1;")
         output_box_layout = QVBoxLayout()
@@ -129,13 +161,10 @@ class EncryptionApp(QMainWindow):
 
     def go_back_to_input_page(self):
         self.stacked_widget.setCurrentIndex(0)  # Pindah ke halaman input
-        # self.text_input.clear()  # Hapus teks input
-        # self.text_output.clear()  # Hapus teks output
-        # self.key_input.clear()  # Hapus kunci enkripsi
-        
-    # def reset_input(self):
-    #     self.text_input.clear()  # Hapus teks input
-    #     self.key_input.clear()  # Hapus kunci enkripsi
+
+    def reset_input(self):
+        self.text_input.clear()  # Hapus teks input
+        self.key_input.clear()  # Hapus kunci enkripsi
         
 if __name__ == "__main__":
     app = QApplication(sys.argv)
